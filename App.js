@@ -1,21 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import Amplify from "aws-amplify";
+import config from "./src/aws-exports";
+Amplify.configure(config);
+
+import {
+  StyleSheet,
+  StatusBar,
+  Platform,
+  SafeAreaView,
+  View,
+  Text,
+} from "react-native";
+
+import "react-native-gesture-handler";
+import Navigation from "./src/navigation";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Navigation />
       <StatusBar style="auto" />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  container: {},
 });
+
+// amplify console api
