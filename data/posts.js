@@ -7,7 +7,7 @@ export default [
       profilePicture: "https://bit.ly/39L85Ty",
       username: "umeshraj",
     },
-    caption: "hahaha this is the caption",
+    caption: "hahaha this is the ",
     songName: "Jashn E Bahara",
     songImage: "https://bit.ly/39L85Ty",
     likes: 500,
