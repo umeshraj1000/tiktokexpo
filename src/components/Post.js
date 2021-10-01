@@ -93,13 +93,13 @@ function Post(props) {
 
                 <View style={styles.songRow}>
                   <Entypo name={"beamed-note"} size={24} color="white" />
-                  <Text style={styles.songName}>{post.songName}</Text>
+                  <Text style={styles.songName}>{post.song.name}</Text>
                 </View>
               </View>
               <Image
                 style={styles.songImage}
                 source={{
-                  uri: post.songImage,
+                  uri: post.song.imageUri,
                 }}
               />
             </View>

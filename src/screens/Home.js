@@ -1,38 +1,30 @@
-import React from "react";
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Dimensions,
-  StatusBar,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, FlatList, Dimensions } from "react-native";
 import Post from "../components/Post";
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
+import { API, graphqlOperation } from "aws-amplify";
 
-import posts from "../../data/posts";
-
-// const post = {
-//   id: "p1",
-//   videoUri: "http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4",
-//   user: {
-//     id: "u1",
-//     profilePicture: "https://bit.ly/39L85Ty",
-//     username: "umeshraj",
-//   },
-//   caption: "hahaha this is the caption",
-//   songName: "Jashn E Bahara",
-//   songImage: "https://bit.ly/39L85Ty",
-//   likes: 500,
-//   comments: 12,
-//   shares: 8,
-// };
+import { listPosts } from "../graphql/queries";
 
 function Home(props) {
-  // console.log(posts);
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      // fetch all the posts
+      try {
+        const response = await API.graphql(graphqlOperation(listPosts));
+        setPosts(response.data.listPosts.items);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchPost();
+  }, []);
+
   const tabBarHeight = useBottomTabBarHeight();
   return (
     <View>
-      {/* <Post Post={post} /> */}
       <FlatList
         data={posts}
         renderItem={({ item }) => <Post post={item} />}
