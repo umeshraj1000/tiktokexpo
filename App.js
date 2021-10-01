@@ -15,7 +15,9 @@ import {
 import "react-native-gesture-handler";
 import Navigation from "./src/navigation";
 
-export default function App() {
+import { withAuthenticator } from "aws-amplify-react-native";
+
+function App() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <Navigation />
@@ -28,3 +30,4 @@ const styles = StyleSheet.create({
   container: {},
 });
 
+export default withAuthenticator(App);
