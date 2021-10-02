@@ -1,105 +1,141 @@
-//   return (
-//     <View style={styles.container}>
-//       {/* <Camera ref={camera} style={styles.preview} /> */}
-//         <TouchableOpacity
-//           onPress={onRecord}
-//           style={isRecording ? styles.buttonStop : styles.buttonRecord}
-//         ></TouchableOpacity>
-//     </View>
-//   );
-// }
+import React, { useState, useEffect } from "react";
+import { Button, Image, View, Platform, Dimensions } from "react-native";
+import * as ImagePicker from "expo-image-picker";
+import { useNavigation } from "@react-navigation/native";
 
-import React, { useState, useEffect, useRef } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { Camera } from "expo-camera";
-
-function CameraScreen() {
-  const [hasPermission, setHasPermission] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const camera = useRef();
+export default function ImagePickerExample() {
+  const [image, setImage] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === "granted");
+      if (Platform.OS !== "web") {
+        const { status } =
+          await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          alert("Sorry, we need camera roll permissions to make this work!");
+        }
+      }
     })();
   }, []);
 
-  if (hasPermission === null) {
-    return <View />;
-  }
-  if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
-  }
+  const pickImage = async () => {
+    let data = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      quality: 1,
+    });
 
-  const onRecord = async () => {
-    if (isRecording) {
-      camera.current.stopRecording();
-    } else {
-      const data = await camera.current.recordAsync();
-      console.log(data);
+    console.log(data);
+
+    if (!data.cancelled) {
+      setImage(data.uri);
+      navigation.navigate("CreatePost", { videoUri: data.uri });
     }
   };
 
-  // const onFlipCamera = () => {
-  //   setType(
-  //     type === Camera.Constants.Type.back
-  //       ? Camera.Constants.Type.front
-  //       : Camera.Constants.Type.back
-  //   );
-  // };
-
   return (
-    <View style={styles.container}>
-      <Camera ref={camera} style={styles.preview}>
-        <TouchableOpacity
-          style={isRecording ? styles.buttonStop : styles.buttonRecord}
-          onPress={onRecord}
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: Dimensions.get("window").width,
+            height: Dimensions.get("window").height,
+          }}
         />
-      </Camera>
+      )}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    flexDirection: "column",
-    backgroundColor: "black",
-  },
-  preview: {
-    position: "absolute",
-    left: 0,
-    top: 0,
-    right: 0,
-    bottom: 0,
-  },
-  buttonRecord: {
-    height: 50,
-    width: 50,
-    backgroundColor: "#ff4343",
-    marginVertical: 10,
-    alignSelf: "center",
-    borderRadius: 25,
-  },
-  buttonStop: {
-    height: 30,
-    width: 30,
-    backgroundColor: "#ff4343",
-    marginVertical: 20,
-    alignSelf: "center",
-    borderRadius: 3,
-  },
-  // button: {
-  //   height: 30,
-  //   width: 30,
-  //   backgroundColor: "#ff4343",
-  //   marginVertical: 20,
-  //   alignSelf: "center",
-  //   borderRadius: 3,
-  //   marginHorizontal: 100,
-  // },
-});
+// import React, { useState, useEffect, useRef } from "react";
+// import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+// import { Camera } from "expo-camera";
 
-export default CameraScreen;
+// export default function CameraScreen() {
+//   const [hasPermission, setHasPermission] = useState(null);
+
+//   useEffect(() => {
+//     (async () => {
+//       const { status } = await Camera.requestPermissionsAsync();
+//       setHasPermission(status === "granted");
+//     })();
+//   }, []);
+
+//   if (hasPermission === null) {
+//     return <View />;
+//   }
+//   if (hasPermission === false) {
+//     return <Text>No access to camera</Text>;
+//   }
+
+//   // OUR CODE STARTS FROM HERE
+//   // OUR CODE STARTS FROM HERE
+//   // OUR CODE STARTS FROM HERE
+//   // OUR CODE STARTS FROM HERE
+//   // OUR CODE STARTS FROM HERE
+//   // OUR CODE STARTS FROM HERE
+
+//   const onRecord = async () => {
+//     console.warn("captured");
+//     if (!isRecording) {
+//       cameraref.current.stopRecording();
+//     } else {
+//       const data = await cameraref.current.recordAsync();
+//     }
+//   };
+
+//   // const [isRecording, setIsRecording] = useState(false);
+//   // const handleRecord = () => {
+//   //   isRecording(!isRecording);
+//   // };
+
+//   const cameraref = useRef();
+
+//   return (
+//     <View style={styles.container}>
+//       <Camera style={styles.camera} ref={cameraref} />
+//       <TouchableOpacity
+//         onPress={onRecord}
+//         style={
+//           // isRecording ? styles.buttonStop : styles.buttonRecord
+//           styles.buttonRecord
+//         }
+//       ></TouchableOpacity>
+//     </View>
+//   );
+// }
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     flexDirection: "column",
+//     backgroundColor: "black",
+//     // alignItems: "center",
+//   },
+//   camera: {
+//     flex: 1,
+//     justifyContent: "flex-end",
+//     alignItems: "center",
+//   },
+//   buttonContainer: {},
+//   buttonRecord: {
+//     height: 50,
+//     width: 50,
+//     backgroundColor: "#ff4343",
+//     marginVertical: 10,
+//     alignSelf: "center",
+//     borderRadius: 25,
+//   },
+//   buttonStop: {
+//     height: 50,
+//     width: 50,
+//     backgroundColor: "#ff4343",
+//     marginVertical: 10,
+//     alignSelf: "center",
+//     borderRadius: 25,
+//   },
+//   text: {},
+// });

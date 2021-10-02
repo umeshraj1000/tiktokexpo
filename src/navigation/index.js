@@ -5,6 +5,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import Home from "../screens/Home";
 import homeBottomTabNavigator from "./homeBottomTabNavigator";
+import CreatePost from "../screens/CreatePost";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,7 @@ const RootNavigation = () => {
         }}
       >
         <Stack.Screen name="Main" component={homeBottomTabNavigator} />
+        <Stack.Screen name="CreatePost" component={CreatePost} />
       </Stack.Navigator>
     </NavigationContainer>
   );
